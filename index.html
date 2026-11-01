@@ -38,7 +38,7 @@ window.SITE_CONFIG = {
       { label: "고려대학교", url: "https://www.korea.ac.kr" },
       { label: "KUPID 포털", url: "https://portal.korea.ac.kr" }
     ],
-    utilButton: { label: "수강 신청", target: "apply" }
+    utilButton: { label: "회원가입", target: "apply" }
   },
 
   /* ---------- 상단 메뉴 (id는 각 섹션 id와 같아야 합니다) ---------- */
@@ -66,13 +66,13 @@ window.SITE_CONFIG = {
       "중국어 기초를 익히면서 AI 도구로 중국어 자료를 찾고, 정리하고, 분석하는 힘을 함께 기릅니다. 처음 배우는 학생도 15주 동안 단계별로 따라올 수 있도록 설계했습니다.",
     // 수강 신청 버튼: applyUrl에 신청 페이지 주소를 넣으면 새 창으로 열립니다.
     //                 비워 두면 페이지 안의 '회원가입'으로 이동합니다.
-    applyLabel: "수강 신청하기",
+    applyLabel: "회원가입하기",
     applyUrl: "",
     curriculumLabel: "커리큘럼 보기",
     // 자주 찾는 메뉴 (icon: apply, book, calendar, quiz, check, faq, notice, poll 중 하나)
     quickTitle: "자주 찾는 메뉴",
     quickLinks: [
-      { icon: "apply",    label: "수강 신청",   target: "apply" },
+      { icon: "apply",    label: "회원가입",   target: "apply" },
       { icon: "book",     label: "15주 커리큘럼", target: "curriculum" },
       { icon: "calendar", label: "수업 달력",   target: "calendar-title" },
       { icon: "quiz",     label: "실시간 퀴즈", target: "quiz" },
@@ -101,7 +101,7 @@ window.SITE_CONFIG = {
   about: {
     eyebrow: "교양중국어의 자랑!",
     title: "이 강의의 장점",
-    lead: "화살표를 누르거나 손가락으로 밀어서 넘겨 보세요.",
+    lead: "다섯 가지 특징을 한눈에 확인하세요.",
     slides: [
       {
         icon: "🌸",
@@ -3049,9 +3049,146 @@ body.is-admin .bulk-btn { display: inline-flex; }
   .wn-ex li { grid-template-columns: 36px 1fr; }
   .wa-yt-no { margin-top: 4px; }
 }
+
+/* ==========================================================
+   UI/UX 개선 — WCAG 2.2 대비·크기·초점, 닐슨 휴리스틱, UX 법칙, KRDS 참고
+   ========================================================== */
+/* 글자 대비 4.5:1 이상이 되도록 강조색·보조 글자색을 진하게 */
+:root {
+  --pink-500: #2f7f1e;
+  --pink-600: #256617;
+  --plum-500: #5d655f;
+  --muted: #5d655f;
+  --danger-text: #c43a2a;
+}
+.btn-primary:hover { background: var(--pink-600); }
+.hero-sub .zh { color: var(--lav-600); }
+
+/* 작은 글자 키우기 (13px 이상) */
+.util-bar { font-size: .875rem; }
+.logo-text small { font-size: .8rem; }
+.is-item dt, .badge, .hero-badge { font-size: .8125rem; }
+.week-no small { font-size: .75rem; }
+
+/* 남은 대비 · 크기 보완 */
+.calendar-wrap .sun, .calendar-wrap .sun .cal-num { color: #b8334f; }
+.calendar-wrap .sat, .calendar-wrap .sat .cal-num { color: #2b5cad; }
+.badge-exam, .tool-tag { color: #17604a; }
+.tool-tag, .eyebrow, .phase-weeks { font-size: .8125rem; }
+.news-more { min-height: 44px; display: inline-flex; align-items: center; }
+.slider-btn, .cal-nav { min-width: 44px; min-height: 44px; }
+
+/* 본문 바로가기 */
+.skip-link { position: fixed; left: 12px; top: -80px; z-index: 300; padding: 12px 18px; border-radius: 12px; background: var(--plum-900); color: #fff; font-weight: 700; text-decoration: none; transition: top .15s; }
+.skip-link:focus { top: 12px; }
+main:focus { outline: none; }
+
+/* 키보드 초점 링 (따로 정하지 않은 요소 전부) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 3px solid var(--lav-600); outline-offset: 2px; }
+
+/* 누르기 쉬운 크기 (44px 이상) */
+.util-links a, .util-btn { min-height: 44px; display: inline-flex; align-items: center; }
+.util-btn { padding: 0 16px; }
+.util-inner { min-height: 44px; }
+.hdr-user-btn { height: 44px; }
+.lock-btn { width: 44px; height: 44px; }
+.link-btn { min-height: 44px; display: inline-flex; align-items: center; }
+.login-join a { display: inline-block; padding: 12px 4px; }
+.footer a { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* 섹션 제목 왼쪽 정렬로 통일 (시선 흐름 일관성) */
+.section-head { text-align: left; margin-left: 0; margin-right: 0; max-width: 760px; }
+.section-head p { max-width: 64ch; }
+.hero-desc, .faq p, .notice-body { max-width: 68ch; }
+
+/* 첫 화면 「이번 주 수업」 카드 */
+.now-card { position: relative; margin-top: 22px; max-width: 560px; padding: 18px 20px; border-radius: 20px; background: #fff; border: 1.5px solid var(--pink-200); box-shadow: 0 18px 36px -24px rgba(22, 35, 24, .5); }
+.now-card.s-during { border-color: var(--pink-500); }
+.now-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.now-badge { padding: 4px 10px; border-radius: 999px; background: var(--pink-50); color: var(--pink-600); font-size: .8125rem; font-weight: 800; }
+.now-card.s-after .now-badge { background: var(--bg); color: var(--muted); }
+.now-dday { font-weight: 900; font-size: 1.05rem; color: var(--danger-text); font-variant-numeric: tabular-nums; }
+.now-title { margin: 10px 0 6px; font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.35; }
+.now-wk { color: var(--pink-600); }
+.now-meta { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; color: var(--plum-700); font-size: .92rem; }
+.now-due { margin: 12px 0 0; padding: 9px 12px; border-radius: 12px; background: #fff6e8; font-size: .9rem; line-height: 1.5; }
+.now-due b { color: var(--danger-text); }
+.now-due span { color: var(--muted); }
+.now-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.now-actions .btn { min-height: 44px; }
+.hero.in-term .hero-actions { display: none; }
+
+/* 강의 장점: 넘기는 슬라이더 대신 한눈에 (넓은 화면) */
+@media (min-width: 1001px) {
+  .slider.band-wrap { grid-template-columns: 1fr; gap: 24px; }
+  .band-intro { padding-right: 0; max-width: 760px; }
+  .band-lead { margin-bottom: 0; }
+  .band-ctrl { display: none; }
+  .band::before { border-radius: 40px; }
+  .band .slider-track { display: grid; grid-auto-flow: row; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-auto-columns: auto; overflow: visible; column-gap: 16px; padding: 28px; }
+}
+
+/* 주차 바로가기 */
+.week-jump { position: sticky; top: calc(var(--header-h) + 8px); z-index: 6; display: flex; align-items: center; gap: 12px; margin: 0 0 16px; padding: 8px 12px; border-radius: 18px; background: rgba(255, 255, 255, .96); border: 1px solid var(--line); box-shadow: 0 12px 24px -20px rgba(22, 35, 24, .55); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.wj-label { flex-shrink: 0; font-size: .85rem; font-weight: 800; color: var(--plum-700); }
+.wj-list { flex: 1; display: flex; gap: 6px; overflow-x: auto; padding: 2px; scrollbar-width: none; }
+.wj-list::-webkit-scrollbar { display: none; }
+.wj { position: relative; flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; color: var(--text); text-decoration: none; font-weight: 800; font-size: .92rem; font-variant-numeric: tabular-nums; transition: border-color .15s, background .15s; }
+.wj:hover { border-color: var(--pink-500); }
+.wj.past { background: var(--bg); color: var(--muted); }
+.wj.exam { border-color: #c2671d; color: #8a4510; }
+.wj.cur { background: var(--pink-600); border-color: var(--pink-600); color: #fff; box-shadow: 0 6px 14px -6px rgba(37, 102, 23, .7); }
+.wj-dot { position: absolute; top: 4px; right: 4px; width: 7px; height: 7px; border-radius: 50%; background: var(--danger-text); }
+.wj-legend { flex-shrink: 0; display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--muted); }
+.wj-legend .wj-dot { position: static; }
+.week { scroll-margin-top: calc(var(--header-h) + 84px); }
+
+/* 휴대폰 하단 탭바 (기본은 숨김) */
+.tabbar { display: none; }
+
+@media (max-width: 640px) {
+  section { padding: 56px 0; }
+  /* 첫 화면 줄이기 */
+  .hero-visual { height: 150px; margin-bottom: 20px; }
+  .now-card { margin-top: 18px; padding: 16px; }
+  .hq-grid { gap: 8px; }
+  .hq-tile { aspect-ratio: auto; min-height: 84px; padding: 10px 4px; gap: 6px; border-radius: 18px; font-size: .84rem; }
+  .info-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); overflow: hidden; }
+  .is-item, .is-item + .is-item { border: 0; }
+  .is-item { background: #fff; padding: 12px; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .is-item dd { font-size: .86rem; }
+  .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .stat-card { padding: 14px 4px; border-radius: 16px; }
+  .stat-card strong { font-size: 1.55rem; }
+  .stat-card > span { font-size: .8125rem; line-height: 1.3; }
+  .wj { width: 44px; height: 44px; }
+  .wj-legend { display: none; }
+  /* 주차 목록 촘촘하게: 겹친 여백을 없애고 배지를 제목 줄에 */
+  .week.card { padding: 0; }
+  .week summary { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 10px; padding: 12px 12px 12px 14px; }
+  .week .week-no { width: 42px; height: 42px; }
+  .week .week-badges { grid-column: auto; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .week-body { padding: 4px 14px 18px; }
+  /* 단계 카드 · AI 도구: 세로로 길게 쌓지 않고 옆으로 밀어 보기 (다음 카드가 살짝 보이게) */
+  #curriculum .grid-4, #tools .grid-3 { display: grid; grid-auto-flow: column; grid-auto-columns: 82%; grid-template-columns: none; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 12px; margin: 0 -2px; scrollbar-width: thin; }
+  #curriculum .grid-4 > *, #tools .grid-3 > * { scroll-snap-align: start; }
+  .hdr-user-btn { width: 44px; }
+  /* 하단 탭바 */
+  .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); background: rgba(255, 255, 255, .97); border-top: 1px solid var(--line); box-shadow: 0 -10px 24px -20px rgba(22, 35, 24, .5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .tabbar a { min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 12px; color: var(--muted); text-decoration: none; font-size: .78rem; font-weight: 700; }
+  .tabbar a[aria-current] { color: var(--pink-600); background: var(--pink-50); }
+  .tabbar svg { width: 22px; height: 22px; }
+  body { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  body.modal-open .tabbar { display: none; }
+  .to-top { bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link, .wj { transition: none; }
+}
 </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
 
   <!-- 떨어지는 꽃잎 장식 -->
   <div class="petals" aria-hidden="true"></div>
@@ -3082,7 +3219,7 @@ body.is-admin .bulk-btn { display: inline-flex; }
     </div>
   </header>
 
-  <main id="main"></main>
+  <main id="main" tabindex="-1"></main>
 
   <footer class="footer" id="footer"></footer>
 
@@ -6056,7 +6193,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
         return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + '<span class="sr-only"> (새 창)</span></a>';
       }) + "</div>" +
       '<div class="util-right"><span>' + esc((C.site.department || "") + " · " + (C.site.courseName || "")) + "</span>" +
-        (ub ? '<a class="util-btn" href="#' + esc(ub.target) + '">' + esc(ub.label) + ' <span aria-hidden="true">↗</span></a>' : "") +
+        (ub ? '<a class="util-btn" href="#' + esc(ub.target) + '">' + esc(ub.label) + "</a>" : "") +
       "</div>";
   }
 
@@ -9180,6 +9317,148 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
 
   window.WeekAI = { refresh: refresh, open: openPanel, ytId: ytId };
   init();
+})();
+
+/* ######################################################## ux */
+/* ==========================================================
+   사용성 개선 (닐슨 휴리스틱 · UX 법칙 · KRDS 참고)
+   - 첫 화면 「이번 주 수업」 카드: 오늘·다음 수업, D-day, 가까운 과제 마감, 바로가기
+   - 학기 중에는 첫 화면 버튼 대신 카드의 버튼이 주 동작이 됨 (버튼 중복 줄이기)
+   - 주차 바로가기 칩 (1~15주, 과제·시험 표시, 이번 주 강조)
+   - 휴대폰 하단 탭바 (엄지가 닿는 곳에 자주 쓰는 메뉴)
+   ========================================================== */
+(function () {
+  "use strict";
+  var CU = window.Curriculum;
+  var W = (CU && CU.weeks) || [];
+  if (!W.length) return;
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(v) {
+    return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var today = CU.today(), now = CU.now();
+  var first = W[0].date, last = W[W.length - 1].date;
+  var state = today < first ? "before" : today > last ? "after" : "during";
+  var cur = state === "during" ? W.filter(function (w) { return w.date >= today; })[0] : null;
+  if (state === "during" && !cur) state = "after";
+  function days(a, b) { return Math.round((new Date(b.getFullYear(), b.getMonth(), b.getDate()) - new Date(a.getFullYear(), a.getMonth(), a.getDate())) / 86400000); }
+  function dLabel(d) { return d <= 0 ? "D-DAY" : "D-" + d; }
+  var nextDue = W.filter(function (w) { return w.due && w.data.assignment && w.due > now; }).sort(function (a, b) { return a.due - b.due; })[0];
+
+  // 주차 열기: 펼치고 그 자리로 이동, 키보드 초점도 옮김
+  function openWeek(n) {
+    var el = document.getElementById("week-" + n);
+    if (!el) return;
+    el.open = true;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    var sm = $("summary", el);
+    if (sm) sm.focus({ preventScroll: true });
+  }
+
+  /* ----- 이번 주 수업 카드 ----- */
+  var target = cur || (state === "before" ? W[0] : W[W.length - 1]);
+  var isToday = state === "during" && CU.key(target.date) === CU.key(today);
+  var badge = state === "before" ? "개강 전" : state === "after" ? "학기 종료" : isToday ? "오늘 수업" : "다음 수업";
+  var dd = state === "before" ? dLabel(days(today, first)) : state === "during" ? (isToday ? "TODAY" : dLabel(days(today, target.date))) : "";
+  var card =
+    '<section class="now-card s-' + state + '" aria-labelledby="now-title">' +
+      '<div class="now-head"><span class="now-badge">' + badge + "</span>" + (dd ? '<span class="now-dday">' + dd + "</span>" : "") + "</div>" +
+      (state === "after"
+        ? '<h2 id="now-title" class="now-title">15주 수업이 모두 끝났어요</h2>' +
+          '<p class="now-meta"><span>주차별 강의 노트 · 문장 · 퀴즈로 계속 복습할 수 있어요.</span></p>'
+        : '<h2 id="now-title" class="now-title"><span class="now-wk">' + target.n + "주차</span> " + esc(target.data.title) + "</h2>" +
+          '<p class="now-meta"><span>📅 ' + esc(CU.fmtDate(target.date)) + (target.time ? " · " + esc(target.time) : "") + "</span>" +
+            (target.place ? "<span>📍 " + esc(target.place) + "</span>" : "") + "</p>") +
+      (nextDue && state !== "after"
+        ? '<p class="now-due">📝 과제 「' + esc(nextDue.data.assignment.title) + "」 마감 <b>" + dLabel(days(today, nextDue.due)) + "</b> <span>" + esc(CU.fmtDue(nextDue.due)) + "</span></p>"
+        : "") +
+      '<div class="now-actions">' +
+        (state === "after"
+          ? '<a class="btn btn-primary btn-sm" href="#curriculum">학습 자료 다시 보기</a>'
+          : state === "before"
+            ? '<a class="btn btn-ghost btn-sm" href="#week-1" data-open-week="1">1주차 미리 보기</a>'
+            : '<a class="btn btn-primary btn-sm" href="#week-' + target.n + '" data-open-week="' + target.n + '">이번 주 학습 자료</a>' +
+              '<a class="btn btn-ghost btn-sm" href="#portal">출석 체크</a>') +
+      "</div>" +
+    "</section>";
+  var actions = $(".hero .hero-actions");
+  if (actions) {
+    actions.insertAdjacentHTML("afterend", card);
+    // 학기 중·학기 뒤에는 카드의 버튼이 주 동작 → 첫 화면 버튼은 숨김
+    if (state !== "before") $(".hero").classList.add("in-term");
+  }
+
+  /* ----- 주차 바로가기 ----- */
+  var head = $(".weeks-head");
+  if (head) {
+    var chips = W.map(function (w) {
+      var isCur = cur && w.n === cur.n;
+      var cls = isCur ? " cur" : w.date < today ? " past" : "";
+      if (w.data.type === "exam") cls += " exam";
+      var tip = w.n + "주차 · " + w.data.title + (w.data.assignment ? " (과제)" : "") + (w.data.type === "exam" ? " (시험)" : "");
+      return '<a href="#week-' + w.n + '" class="wj' + cls + '" data-open-week="' + w.n + '" title="' + esc(tip) + '" aria-label="' + esc(tip) + '"' + (isCur ? ' aria-current="date"' : "") + ">" +
+        w.n + (w.data.assignment ? '<i class="wj-dot" aria-hidden="true"></i>' : "") + "</a>";
+    }).join("");
+    head.insertAdjacentHTML("afterend",
+      '<nav class="week-jump" aria-label="주차 바로가기"><span class="wj-label">주차</span><div class="wj-list">' + chips + "</div>" +
+      '<span class="wj-legend" aria-hidden="true"><i class="wj-dot"></i>과제</span></nav>');
+    var curChip = $(".wj.cur");
+    if (curChip) { var list = curChip.parentNode; list.scrollLeft = curChip.offsetLeft - list.clientWidth / 2; }
+  }
+
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-open-week]");
+    if (!a) return;
+    e.preventDefault();
+    openWeek(+a.dataset.openWeek);
+  });
+
+  /* ----- 휴대폰 하단 탭바 ----- */
+  var IC = {
+    home: '<path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/>',
+    week: '<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M9 15l2 2 4-4"/>',
+    bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+    bolt: '<path d="M13 3L5 14h6l-1 7 8-11h-6z"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>'
+  };
+  var weekHref = cur ? "#week-" + cur.n : "#curriculum";
+  var tabs = [
+    ["#top", "홈", "home", "top"],
+    [weekHref, state === "during" ? "이번 주" : "커리큘럼", "week", "curriculum"],
+    ["#notices", "공지", "bell", "notices"],
+    ["#quiz", "퀴즈", "bolt", "quiz"],
+    ["#portal", "내 공간", "user", "portal"]
+  ].filter(function (t) { return document.getElementById(t[3]); });
+  var bar = document.createElement("nav");
+  bar.className = "tabbar";
+  bar.setAttribute("aria-label", "빠른 이동");
+  bar.innerHTML = tabs.map(function (t) {
+    return '<a href="' + t[0] + '" data-sec="' + t[3] + '"' + (t[0].indexOf("#week-") === 0 ? ' data-open-week="' + cur.n + '"' : "") + ">" +
+      '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">' + IC[t[2]] + "</svg>" +
+      "<span>" + t[1] + "</span></a>";
+  }).join("");
+  document.body.appendChild(bar);
+  // 지금 보고 있는 구역을 탭에 표시 (현재 위치 알려 주기)
+  var secs = tabs.map(function (t) { return document.getElementById(t[3]); });
+  function mark() {
+    if (getComputedStyle(bar).display === "none") return;
+    // 화면 위쪽 35% 선을 이미 지난 구역 가운데 가장 가까운(아래쪽) 구역을 지금 위치로 봄
+    var line = window.innerHeight * 0.35, curSec = "top", best = -Infinity;
+    secs.forEach(function (el) {
+      var top = el.getBoundingClientRect().top;
+      if (top <= line && top > best) { best = top; curSec = el.id; }
+    });
+    $$("a", bar).forEach(function (a) {
+      if (a.dataset.sec === curSec) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
+    });
+  }
+  window.addEventListener("scroll", mark, { passive: true });
+  window.addEventListener("resize", mark);
+  mark();
 })();
 </script>
 </body>

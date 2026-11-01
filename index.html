@@ -69,7 +69,7 @@ window.SITE_CONFIG = {
     //                 비워 두면 페이지 안의 '회원가입'으로 이동합니다.
     applyLabel: "회원가입하기",
     applyUrl: "",
-    curriculumLabel: "커리큘럼 보기",
+    curriculumLabel: "수업 일정 보기",
     // 자주 찾는 메뉴 (icon: apply, book, calendar, quiz, check, faq, notice, poll 중 하나)
     quickTitle: "자주 찾는 메뉴",
     quickLinks: [
@@ -101,7 +101,7 @@ window.SITE_CONFIG = {
   /* ---------- 프로그램 소개 (강의 장점 슬라이드) ---------- */
   about: {
     eyebrow: "교양중국어의 자랑!",
-    title: "이 강의의 장점",
+    title: "강의 소개",
     lead: "처음 배우는 학생이 15주 뒤 중국어로 자료를 찾고 정리할 수 있게 짰습니다.",
     slides: [
       {
@@ -3496,6 +3496,154 @@ input, select, textarea { border-radius: 8px; }
 .prep { text-align: left; }
 #enroll .notice::before { content: none; }
 .faq-item summary .q, .faq-q { border-radius: 4px; }
+
+/* ==========================================================
+   레이아웃 v4 — 강의 사이트형 (왼쪽 목차 + 한 페이지씩)
+   문서처럼: 상자보다 여백과 선, 표는 표로, 제목은 본문 글꼴
+   ========================================================== */
+:root { --side-w: 260px; --radius: 4px; --radius-sm: 4px; }
+.util-bar, .header, .week-jump, .hz-row, .hero-index { display: none !important; }
+body { padding-left: var(--side-w); background: #fff; }
+main > section[hidden] { display: none !important; }
+main > section, section.tint, #about, #participate, .notices-section, .hero { background: transparent !important; }
+main h1, main h2, .footer h2, .sub-title, .about-head h2, .promo-card strong, .promo-card h3 { font-family: inherit !important; letter-spacing: -.02em; }
+.card { border-radius: 4px; }
+
+/* ----- 사이드바 ----- */
+.side { position: fixed; top: 0; bottom: 0; left: 0; z-index: 60; width: var(--side-w); display: flex; flex-direction: column; padding: 22px 16px 18px; overflow-y: auto; background: #f8f9fa; border-right: 1px solid var(--rule); }
+.side-brand { display: flex; align-items: center; gap: 10px; margin: 0 6px 18px; color: var(--ink); text-decoration: none; }
+.side-brand .logo-mark { width: 38px; height: 38px; font-size: 22px; flex-shrink: 0; }
+.side-brand strong { display: block; font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em; }
+.side-brand small { display: block; margin-top: 1px; color: var(--ink-3); font-size: .78rem; }
+.side-group { margin: 16px 10px 4px; color: var(--ink-3); font-size: .78rem; font-weight: 700; }
+.side-nav ul { list-style: none; margin: 0; padding: 0; }
+.side-nav a { display: flex; align-items: center; min-height: 38px; padding: 0 10px; border-radius: 4px; color: var(--ink-2); font-size: .95rem; font-weight: 600; text-decoration: none; }
+.side-nav a:hover { background: #eceff2; color: var(--ink); }
+.side-nav a[aria-current="page"] { background: #e6edf8; color: var(--act); }
+.side-sub a { min-height: 32px; padding-left: 22px; color: var(--ink-3); font-size: .875rem; font-weight: 500; }
+.side-sub a[aria-current] { color: var(--ink); font-weight: 700; }
+.side-foot { position: relative; display: flex; align-items: center; gap: 6px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--rule); }
+.side-foot .hdr-user { flex: 1; position: static; }
+.side-foot .hdr-user-btn { width: 100%; height: 40px; justify-content: flex-start; padding: 0 12px; border: 1px solid var(--rule-2); border-radius: 4px; background: #fff; }
+.side-foot .hdr-user-label { position: static !important; width: auto !important; height: auto !important; clip: auto !important; overflow: hidden; }
+.side-foot .lock-btn { width: 40px; height: 40px; border: 1px solid var(--rule-2); border-radius: 4px; background: #fff; }
+.side .hdr-pop { position: absolute; top: auto !important; bottom: calc(100% + 8px); left: 0; right: auto; width: 100%; box-sizing: border-box; border-radius: 4px; box-shadow: 0 12px 30px -14px rgba(0, 0, 0, .35); }
+.side-links { list-style: none; margin: 12px 0 0; padding: 0 6px; display: flex; flex-wrap: wrap; gap: 0 14px; }
+.side-links a { display: inline-flex; align-items: center; min-height: 32px; color: var(--ink-3); font-size: .8rem; text-decoration: none; }
+.side-links a:hover { color: var(--ink); text-decoration: underline; }
+.topbar, .side-scrim { display: none; }
+
+/* ----- 본문 칸 ----- */
+main .container, .footer .container { max-width: 940px; margin: 0; padding: 0 48px; }
+main > section { padding: 44px 0; }
+main > section:not([hidden]) ~ section:not([hidden]) { border-top: 1px solid var(--rule); }
+.section-head { display: block; margin: 0 0 24px; }
+.section-head h2 { font-size: 1.65rem; font-weight: 800; line-height: 1.3; }
+.section-head p { margin: 8px 0 0; max-width: 42em; color: var(--ink-2); font-size: 1rem; line-height: 1.7; }
+
+/* ----- 홈: 과목 현황판 ----- */
+.hero { padding: 40px 0 36px; }
+.hero-grid { display: block; }
+.course-term { margin: 0 0 8px; color: var(--ink-3); font-size: .9rem; font-weight: 600; }
+.course-title { margin: 0; font-size: 2.1rem; font-weight: 800; line-height: 1.25; }
+.course-title .zh { margin-left: 10px; color: var(--ink-2); font-family: var(--zh-serif); font-size: .82em; font-weight: 500; }
+.course-py { margin: 6px 0 16px; font-size: .95rem; font-weight: 700; letter-spacing: .02em; }
+.course-py span + span { margin-left: 7px; }
+.course-desc { max-width: 42em; margin: 0 0 22px; color: var(--ink-2); line-height: 1.8; }
+.course-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 0 22px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.course-facts div { padding: 12px 16px 12px 0; }
+.course-facts div + div { padding-left: 16px; border-left: 1px solid var(--rule); }
+.course-facts dt { color: var(--ink-3); font-size: .8rem; font-weight: 700; }
+.course-facts dd { margin: 2px 0 0; font-size: .95rem; font-weight: 600; line-height: 1.5; }
+.hero-actions { margin: 0 0 8px; gap: 10px 24px; }
+.hero-side { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 28px; align-items: start; padding: 10px 0 0; }
+.now-card, .now-card.s-during, .now-card.s-after { margin: 0; padding: 18px; border: 1px solid var(--rule) !important; border-radius: 4px; background: #fff; }
+.now-badge { border-radius: 2px; }
+.now-title { font-family: inherit !important; font-size: 1.1rem; }
+.now-due { border-radius: 2px; }
+.home-up h2, .home-now h2 { margin: 0 0 8px; font-size: 1rem; font-weight: 800; }
+.up-table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+.up-table th { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--ink); color: var(--ink-3); font-size: .8rem; font-weight: 700; text-align: left; white-space: nowrap; }
+.up-table td { padding: 10px 10px 10px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.up-table td:first-child { width: 2.5em; font-weight: 800; font-variant-numeric: tabular-nums; }
+.up-table td:nth-child(2), .up-table td:nth-child(4) { white-space: nowrap; color: var(--ink-2); }
+.up-table a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.up-table a:hover { color: var(--act); text-decoration: underline; text-underline-offset: 3px; }
+.up-exam { padding: 1px 6px; border-radius: 2px; background: #fbeceb; color: var(--t1); font-size: .75rem; font-weight: 700; }
+.up-none { margin: 0; color: var(--ink-2); }
+.up-none a { color: var(--act); }
+/* 공지: 홈 안에서 */
+.notices-section { padding: 36px 0 48px !important; }
+.news-grid { grid-template-columns: minmax(0, 1fr) 260px; gap: 32px; }
+.news-cards { border-top: 1px solid var(--ink); }
+.promo-card { border-top: 1px solid var(--rule) !important; border-radius: 4px; padding: 20px; }
+
+/* ----- 수업 일정: 표처럼 ----- */
+#curriculum .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border: 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; }
+.phase, .phase:first-child { padding: 16px 16px 14px 0; border: 0 !important; border-radius: 0 !important; background: transparent; }
+.phase + .phase { padding-left: 16px; border-left: 1px solid var(--rule) !important; }
+.phase::before { font-size: 1.35rem; margin-bottom: 4px; }
+.phase h3 { margin: 4px 0 8px; font-size: 1rem; }
+.phase ul { font-size: .9rem; }
+.weeks-head { margin: 40px 0 10px; }
+.week-list { gap: 0; border-top: 1px solid var(--ink); }
+.week, .week.card { padding: 0 !important; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; }
+.week[open] { background: #fafbfc; }
+.week summary { padding: 12px 6px; }
+.week-no { width: auto !important; height: auto !important; display: block; padding: 0; background: none !important; color: var(--ink) !important; font-weight: 800; text-align: left; }
+.week-no small { display: none; }
+.week-no strong { font-size: 1.05rem; }
+.week.past .week-no { color: var(--ink-3) !important; }
+.week-body { padding: 4px 6px 24px; border-top: 0; }
+.calendar-wrap .card, .calendar { border-radius: 4px; }
+
+/* ----- 강의 안내 ----- */
+.about { padding: 44px 0 !important; }
+.about-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.about-head h2 { font-size: 1.65rem; font-weight: 800; }
+.about-list { gap: 0 32px; }
+.about-list li { padding: 16px 0; border-top: 1px solid var(--rule); }
+#tools .grid-3 { border-top: 1px solid var(--ink); }
+.faq-list { border-top: 1px solid var(--ink); }
+.info-banner { border-radius: 4px; }
+.footer { background: #fff; border-top: 1px solid var(--rule); }
+
+@media (max-width: 1100px) {
+  .hero-side { grid-template-columns: minmax(0, 1fr); }
+  .news-grid { grid-template-columns: minmax(0, 1fr); }
+  .course-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .course-facts div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .course-facts div:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  #curriculum .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .phase:nth-child(3) { padding-left: 0; border-left: 0 !important; }
+  .phase:nth-child(n+3) { border-top: 1px solid var(--rule) !important; }
+}
+@media (max-width: 900px) {
+  body { padding-left: 0; padding-top: 56px; }
+  .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 70; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px 0 14px; background: #fff; border-bottom: 1px solid var(--rule); }
+  .topbar .side-brand { margin: 0; }
+  .topbar .side-brand .logo-mark { width: 34px; height: 34px; font-size: 19px; }
+  .topbar .side-brand small { display: none; }
+  .topbar-menu { min-height: 44px; padding: 0 16px; border: 1px solid var(--rule-2); border-radius: 4px; background: #fff; color: var(--ink); font: inherit; font-weight: 700; cursor: pointer; }
+  .side { z-index: 96; width: min(300px, 86vw); transform: translateX(-100%); transition: transform .2s ease; }
+  body.drawer-open .side { transform: none; box-shadow: 0 0 40px rgba(0, 0, 0, .2); }
+  .side-scrim:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 95; background: rgba(15, 18, 22, .4); }
+  main .container, .footer .container { padding: 0 18px; }
+  main > section { padding: 32px 0; }
+  .hero { padding: 28px 0 28px; }
+  .course-title { font-size: 1.7rem; }
+  .course-title .zh { display: block; margin: 4px 0 0; }
+}
+@media (max-width: 640px) {
+  #curriculum .grid-4 { display: grid; grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-columns: auto; overflow: visible; padding: 0; margin: 0; }
+  .phase, .phase:first-child, .phase:nth-child(3), .phase:nth-child(n+3) { border-radius: 0 !important; }
+  .up-table th:nth-child(4), .up-table td:nth-child(4) { display: none; }
+  .news-card { grid-template-columns: 58px minmax(0, 1fr); }
+  .tabbar { z-index: 90; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .side { transition: none; }
+}
 </style>
 </head>
 <body>
@@ -3916,6 +4064,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
   function openWeek(n) {
     var el = document.getElementById("week-" + n);
     if (!el) return;
+    if (window.Pages) window.Pages.reveal(el);
     el.open = true;
     el.classList.add("in");
     el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -6132,45 +6281,28 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
     hero: function (h) {
       var applyHref = h.applyUrl ? esc(h.applyUrl) : (C.participate ? "#apply" : "#enroll");
       var applyExtra = h.applyUrl ? ' target="_blank" rel="noopener"' : "";
-      // 큰 제목: \n 줄바꿈. *별표*는 강조색 없이 그냥 글자로 둠
-      var headline = esc(h.headline || h.title).replace(/\*([^*]+)\*/g, "$1").replace(/\n/g, "<br>");
-      // 田字格 한자 + 성조 색 병음
-      var zh = Array.from(h.titleZh || "");
-      var py = String(h.titlePinyin || "").trim().split(/\s+/);
-      var hanzi = zh.length
-        ? '<div class="hz-row" role="img" aria-label="' + esc(h.titleZh + (h.titlePinyin ? " (" + h.titlePinyin + ")" : "")) + '">' +
-            zh.map(function (ch, i) {
-              var syl = py[i] || "";
-              return '<span class="hz-cell"><small class="py t' + toneOf(syl) + '">' + esc(syl) + "</small><b>" + esc(ch) + "</b></span>";
-            }).join("") +
-          "</div>"
-        : "";
-      var links = list(h.quickLinks, function (q) {
-        return '<li><a href="#' + esc(q.target) + '">' + esc(q.label) + "</a></li>";
-      });
+      var py = String(h.titlePinyin || "").trim().split(/\s+/).filter(Boolean);
       var facts = list(h.quickInfo, function (q) {
         return "<div><dt>" + esc(q.label) + "</dt><dd>" + esc(q.value) + "</dd></div>";
       });
       return (
-        '<section class="hero" id="top">' +
-          '<div class="container hero-grid">' +
-            '<div class="hero-text">' +
-              hanzi +
-              '<p class="hero-kicker">' + esc([h.badge, h.subtitle].filter(Boolean).join(" · ")) + "</p>" +
-              "<h1>" + headline + "</h1>" +
-              '<p class="hero-desc">' + esc(h.description) + "</p>" +
-              '<div class="hero-actions">' +
-                '<a class="btn btn-primary" href="' + applyHref + '"' + applyExtra + ">" + esc(h.applyLabel || "회원가입하기") + "</a>" +
-                '<a class="text-link" href="#curriculum">' + esc(h.curriculumLabel || "커리큘럼 보기") + "</a>" +
-              "</div>" +
+        '<section class="hero" id="top"><div class="container">' +
+          '<header class="course-head">' +
+            '<p class="course-term">' + esc([h.badge, h.subtitle].filter(Boolean).join(" · ")) + "</p>" +
+            '<h1 class="course-title">' + esc(h.title || C.site.courseName) +
+              (h.titleZh ? ' <span class="zh" lang="zh-CN">' + esc(h.titleZh) + "</span>" : "") + "</h1>" +
+            (py.length ? '<p class="course-py" aria-label="병음 ' + esc(h.titlePinyin) + '">' + py.map(function (sy) {
+              return '<span class="py t' + toneOf(sy) + '">' + esc(sy) + "</span>";
+            }).join("") + "</p>" : "") +
+            '<p class="course-desc">' + esc(h.description) + "</p>" +
+            (facts ? '<dl class="course-facts">' + facts + "</dl>" : "") +
+            '<div class="hero-actions">' +
+              '<a class="btn btn-primary" href="' + applyHref + '"' + applyExtra + ">" + esc(h.applyLabel || "회원가입하기") + "</a>" +
+              '<a class="text-link" href="#curriculum">' + esc(h.curriculumLabel || "수업 일정 보기") + "</a>" +
             "</div>" +
-            '<aside class="hero-side" aria-label="수업 안내">' +
-              (facts ? '<dl class="hero-facts">' + facts + "</dl>" : "") +
-            "</aside>" +
-          "</div>" +
-          (links ? '<div class="container"><nav class="hero-index" aria-label="' + esc(h.quickTitle || "바로가기") + '">' +
-            '<span class="hero-index-label">' + esc(h.quickTitle || "바로가기") + "</span><ul>" + links + "</ul></nav></div>" : "") +
-        "</section>"
+          "</header>" +
+          '<div class="hero-side"></div>' +
+        "</div></section>"
       );
     },
 
@@ -9611,7 +9743,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
     try { re = sessionStorage.getItem("kcn:wa:reopen"); sessionStorage.removeItem("kcn:wa:reopen"); } catch (e) { /* 무시 */ }
     if (re && isAdmin()) {
       var el = document.getElementById("week-" + re);
-      if (el) { el.open = true; setTimeout(function () { el.scrollIntoView({ block: "start" }); openPanel(+re); }, 150); }
+      if (el) { el.open = true; setTimeout(function () { if (window.Pages) window.Pages.reveal(el); el.scrollIntoView({ block: "start" }); openPanel(+re); }, 150); }
     }
   }
 
@@ -9653,6 +9785,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
   function openWeek(n) {
     var el = document.getElementById("week-" + n);
     if (!el) return;
+    if (window.Pages) window.Pages.reveal(el);
     el.open = true;
     el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     var sm = $("summary", el);
@@ -9746,6 +9879,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
   // 지금 보고 있는 구역을 탭에 표시 (현재 위치 알려 주기)
   var secs = tabs.map(function (t) { return document.getElementById(t[3]); });
   function mark() {
+    if (window.Pages) return; // 페이지형 레이아웃에서는 Pages가 탭 표시를 맡음
     if (getComputedStyle(bar).display === "none") return;
     // 화면 위쪽 35% 선을 이미 지난 구역 가운데 가장 가까운(아래쪽) 구역을 지금 위치로 봄
     var line = window.innerHeight * 0.35, curSec = "top", best = -Infinity;
@@ -9760,6 +9894,195 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
   window.addEventListener("scroll", mark, { passive: true });
   window.addEventListener("resize", mark);
   mark();
+})();
+
+/* ######################################################## layout */
+/* ==========================================================
+   강의 사이트형 레이아웃
+   - 왼쪽 고정 목차(사이드바) + 오른쪽에 한 페이지씩 (긴 한 장 스크롤 대신)
+   - 주소 뒤 #아이디로 페이지가 정해짐: #curriculum → 수업 일정, #portal → 퀴즈·출석·과제 …
+   - 휴대폰: 위쪽 막대 + 서랍 메뉴, 아래 탭바
+   ========================================================== */
+(function () {
+  "use strict";
+  var C = window.SITE_CONFIG || {};
+  var main = document.getElementById("main");
+  if (!main) return;
+  function $(s, r) { return (r || document).querySelector(s); }
+  function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+  function esc(v) {
+    return String(v == null ? "" : v).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /* ----- 교수자 소개를 바닥글에서 꺼내 독립 페이지로 ----- */
+  var ins = document.getElementById("instructor");
+  if (ins) {
+    var isec = document.createElement("section");
+    isec.id = "instructor-page";
+    var ic = document.createElement("div");
+    ic.className = "container";
+    ic.appendChild(ins);
+    isec.appendChild(ic);
+    main.appendChild(isec);
+  }
+
+  /* ----- 홈: 이번 주 · 다가오는 수업 표 ----- */
+  var CU = window.Curriculum;
+  var side0 = $(".hero .hero-side");
+  var nowCard = side0 && $(".now-card", side0);
+  if (nowCard) {
+    var nowWrap = document.createElement("section");
+    nowWrap.className = "home-now";
+    nowWrap.setAttribute("aria-labelledby", "now-h");
+    nowWrap.innerHTML = '<h2 id="now-h">이번 주</h2>';
+    side0.insertBefore(nowWrap, nowCard);
+    nowWrap.appendChild(nowCard);
+    nowCard.removeAttribute("aria-labelledby");
+  }
+  if (CU && CU.weeks && side0) {
+    var today = CU.today();
+    var up = CU.weeks.filter(function (w) { return w.date >= today; }).slice(0, 4);
+    side0.insertAdjacentHTML("beforeend",
+      '<section class="home-up" aria-labelledby="up-title"><h2 id="up-title">다가오는 수업</h2>' +
+      (up.length
+        ? '<table class="up-table"><thead><tr><th scope="col">주차</th><th scope="col">날짜</th><th scope="col">주제</th><th scope="col">과제 마감</th></tr></thead><tbody>' +
+          up.map(function (w) {
+            var a = w.data.assignment;
+            return "<tr><td>" + w.n + "</td><td>" + esc(CU.fmtShort(w.date)) + "</td>" +
+              '<td><a href="#week-' + w.n + '" data-open-week="' + w.n + '">' + esc(w.data.title) + "</a>" + (w.data.type === "exam" ? ' <span class="up-exam">시험</span>' : "") + "</td>" +
+              "<td>" + (a && w.due ? esc(CU.fmtShort(w.due)) : "") + "</td></tr>";
+          }).join("") + "</tbody></table>"
+        : '<p class="up-none">이번 학기 수업이 모두 끝났습니다. 15주 자료는 <a href="#curriculum">수업 일정</a>에서 다시 볼 수 있습니다.</p>') +
+      "</section>");
+  }
+
+  /* ----- 페이지 정의 (메뉴 순서) ----- */
+  var PAGES = [
+    { id: "home", label: "홈", secs: ["top", "notices"], group: "수업", subs: [["notices", "공지사항"]] },
+    { id: "schedule", label: "수업 일정", secs: ["curriculum"], group: "수업", subs: [["calendar-title", "수업 달력"]] },
+    { id: "participate", label: "퀴즈 · 출석 · 과제", secs: ["participate"], group: "수업", subs: [["portal", "수강생 공간"], ["quiz", "실시간 퀴즈"], ["apply", "회원가입"]] },
+    { id: "guide", label: "강의 안내", secs: ["about", "enroll", "tools"], group: "안내", subs: [["enroll", "수강 안내"], ["tools", "AI 도구"]] },
+    { id: "faq", label: "자주 묻는 질문", secs: ["faq"], group: "안내" },
+    { id: "instructor", label: "교수자", secs: ["instructor-page"], group: "안내" }
+  ].filter(function (p) { return p.secs.some(function (id) { return document.getElementById(id); }); });
+  PAGES.forEach(function (p) { if (p.subs) p.subs = p.subs.filter(function (s) { return document.getElementById(s[0]); }); });
+  var bySec = {};
+  PAGES.forEach(function (p) { p.secs.forEach(function (id) { bySec[id] = p; }); });
+  function pageOf(el) {
+    while (el && el !== document.body) {
+      if (el.parentElement === main && bySec[el.id]) return bySec[el.id];
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  /* ----- 사이드바 ----- */
+  var site = C.site || {};
+  var brand =
+    '<a class="side-brand" href="#top"><span class="logo-mark" aria-hidden="true">汉</span>' +
+    "<span><strong>" + esc(site.logoText || site.courseName || "교양중국어") + "</strong><small>" + esc(site.logoSub || "") + "</small></span></a>";
+  var groups = [];
+  PAGES.forEach(function (p) { if (groups.indexOf(p.group) < 0) groups.push(p.group); });
+  var side = document.createElement("aside");
+  side.className = "side";
+  side.id = "side";
+  side.setAttribute("aria-label", "사이트 메뉴");
+  side.innerHTML = brand +
+    '<nav class="side-nav" aria-label="주요 메뉴">' + groups.map(function (g) {
+      return '<p class="side-group">' + esc(g) + "</p><ul>" + PAGES.filter(function (p) { return p.group === g; }).map(function (p) {
+        return '<li><a href="#' + (p.id === "home" ? "top" : p.secs[0]) + '" data-page="' + p.id + '">' + esc(p.label) + "</a>" +
+          (p.subs && p.subs.length ? '<ul class="side-sub">' + p.subs.map(function (s) {
+            return '<li><a href="#' + s[0] + '" data-sub="' + s[0] + '">' + esc(s[1]) + "</a></li>";
+          }).join("") + "</ul>" : "") + "</li>";
+      }).join("") + "</ul>";
+    }).join("") + "</nav>" +
+    '<div class="side-foot"></div>' +
+    ((site.utilLinks || []).length ? '<ul class="side-links">' + site.utilLinks.map(function (l) {
+      return '<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + '<span class="sr-only"> (새 창)</span></a></li>';
+    }).join("") + "</ul>" : "");
+  var util = $(".util-bar");
+  document.body.insertBefore(side, util || document.body.firstChild);
+  // 로그인 · 관리자 버튼을 사이드바 아래로 옮김 (기존 동작 그대로)
+  var foot = $(".side-foot", side);
+  var hu = document.getElementById("hdr-user"), lock = $(".lock-btn");
+  if (hu) foot.appendChild(hu);
+  if (lock) foot.appendChild(lock);
+
+  // 휴대폰 위쪽 막대 + 서랍
+  var bar = document.createElement("div");
+  bar.className = "topbar";
+  bar.innerHTML = brand + '<button type="button" class="topbar-menu" aria-expanded="false" aria-controls="side">메뉴</button>';
+  document.body.insertBefore(bar, side);
+  var scrim = document.createElement("div");
+  scrim.className = "side-scrim";
+  scrim.hidden = true;
+  document.body.appendChild(scrim);
+  var menuBtn = $(".topbar-menu", bar);
+  function setDrawer(open) {
+    document.body.classList.toggle("drawer-open", open);
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    scrim.hidden = !open;
+    if (open) { var a = $(".side-nav a[aria-current]", side) || $(".side-nav a", side); if (a) a.focus(); }
+  }
+  menuBtn.addEventListener("click", function () { setDrawer(!document.body.classList.contains("drawer-open")); });
+  scrim.addEventListener("click", function () { setDrawer(false); menuBtn.focus(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.body.classList.contains("drawer-open")) { setDrawer(false); menuBtn.focus(); }
+  });
+
+  /* ----- 페이지 바꾸기 ----- */
+  var current = null;
+  function show(page, target, focus) {
+    $$(":scope > section", main).forEach(function (s) { s.hidden = page.secs.indexOf(s.id) < 0; });
+    document.body.setAttribute("data-page", page.id);
+    $$(".side-nav a[data-page]", side).forEach(function (a) {
+      if (a.dataset.page === page.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    $$(".side-nav a[data-sub]", side).forEach(function (a) {
+      if (target && a.dataset.sub === target.id) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
+    });
+    // 휴대폰 아래 탭바: 지금 페이지 표시
+    var tabs = $$(".tabbar a");
+    var hit = target && tabs.filter(function (a) { return a.getAttribute("href") === "#" + target.id; })[0];
+    if (!hit) hit = tabs.filter(function (a) { var el = document.getElementById(a.getAttribute("href").slice(1)); return el && pageOf(el) === page; })[0];
+    tabs.forEach(function (a) { if (a === hit) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    current = page;
+    setDrawer(false);
+    var isTop = !target || target.id === "top" || target.id === page.secs[0];
+    if (isTop) window.scrollTo(0, 0);
+    else target.scrollIntoView({ block: "start" });
+    if (focus) {
+      var sec = target && !isTop ? target : document.getElementById(page.secs[0]);
+      var h = sec && (sec.matches("h1, h2, h3") ? sec : $("h1, h2, h3", sec));
+      if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); }
+    }
+  }
+  function route(focus) {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (id === "main") return;
+    var el = id ? document.getElementById(id) : null;
+    show((el && pageOf(el)) || PAGES[0], el, focus);
+  }
+  window.addEventListener("hashchange", function () { route(true); });
+  // 같은 주소를 다시 눌러도 그 페이지로 (주소가 그대로면 hashchange가 안 생김)
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || a.getAttribute("href") !== location.hash) return;
+    e.preventDefault();
+    route(true);
+  });
+
+  window.Pages = {
+    // 다른 코드가 페이지 밖의 요소로 이동할 때 먼저 그 페이지를 보여 줌
+    reveal: function (el) {
+      var p = pageOf(el);
+      if (p && p !== current) show(p, null, false);
+    },
+    current: function () { return current && current.id; }
+  };
+  route(false);
 })();
 </script>
 </body>

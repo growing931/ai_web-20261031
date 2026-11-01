@@ -2318,6 +2318,22 @@ section.tint { background: #fff; }
 .nav a.active { background: none; color: var(--accent); }
 .nav a.active::after { content: ""; position: absolute; left: 15px; right: 15px; bottom: 2px; height: 2px; border-radius: 2px; background: var(--accent); }
 .lock-btn { border: 0; background: transparent; color: var(--plum-700); }
+/* 헤더 수강생 로그인 */
+.hdr-user { position: relative; }
+.hdr-user-btn { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--pink-200); background: #fff; color: var(--plum-700); font: inherit; font-size: .9rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.hdr-user-btn:hover { background: var(--pink-50); }
+.hdr-user-btn.on { background: var(--pink-50); border-color: var(--pink-300, var(--pink-200)); }
+.hdr-user-btn:focus-visible { outline: 3px solid var(--lav-400); outline-offset: 2px; }
+.hdr-user-label { max-width: 9em; overflow: hidden; text-overflow: ellipsis; }
+.hdr-pop { position: absolute; top: calc(100% + 10px); right: 0; z-index: 80; width: 300px; padding: 18px; background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 18px 40px -16px rgba(22, 35, 24, .35); }
+.hdr-pop[hidden] { display: none; }
+.hdr-pop-title { margin: 0 0 12px; font-weight: 800; display: flex; flex-direction: column; }
+.hdr-pop-title small { font-weight: 500; color: var(--muted); font-size: .8rem; }
+.hdr-pop .login-form { gap: 10px; }
+.hdr-pop .login-join { margin: 0; text-align: center; }
+.hdr-pop-link { display: block; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; border: 0; background: none; font: inherit; color: var(--text); text-decoration: none; cursor: pointer; }
+.hdr-pop-link:hover, .hdr-pop-link:focus-visible { background: var(--pink-50); }
+.hdr-logout { color: var(--highlight); border-top: 1px solid var(--line); border-radius: 0 0 10px 10px; margin-top: 4px; }
 .lock-btn:hover { background: var(--pink-50); }
 .menu-toggle { background: transparent; }
 .menu-toggle span { background: var(--plum-900); }
@@ -2600,6 +2616,9 @@ section.tint { background: #fff; }
   .nav a.active::after { display: none; }
 }
 @media (max-width: 640px) {
+  .hdr-user-btn { width: 40px; padding: 0; justify-content: center; }
+  .hdr-user-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .hdr-pop { position: fixed; top: 112px; left: 16px; right: 16px; width: auto; }
   .util-right span { display: none; }
   .util-links a { padding: 0 8px; }
   .hero { padding: 0 0 32px; }
@@ -2648,6 +2667,7 @@ section.tint { background: #fff; }
       </a>
       <nav class="nav" id="nav" aria-label="주요 메뉴"></nav>
       <div class="header-actions">
+        <div class="hdr-user" id="hdr-user"></div>
         <button class="lock-btn" type="button" aria-label="관리자 화면 열기" title="관리자">
           <svg class="ic-lock" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <svg class="ic-unlock" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V8a4 4 0 0 1 7.6-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -3638,7 +3658,50 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
     return '<article class="card portal reveal" id="portal"><div class="portal-inner"></div></article>';
   }
 
+  /* ---------- 헤더의 수강생 로그인 ---------- */
+  var ICON_USER = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+  function renderHeaderUser(open) {
+    var box = document.getElementById("hdr-user");
+    if (!box) return;
+    var u = user();
+    var btn = '<button type="button" class="hdr-user-btn' + (u ? " on" : "") + '" aria-expanded="' + (open ? "true" : "false") + '" aria-controls="hdr-pop">' +
+      ICON_USER + '<span class="hdr-user-label">' + (u ? esc(u.name) + " 님" : "로그인") + "</span></button>";
+    var pop;
+    if (!u) {
+      pop = '<p class="hdr-pop-title">수강생 로그인</p>' +
+        '<form class="login-form hdr-login" novalidate>' +
+          '<div class="field" data-field="lid"><label for="hl-id">아이디</label>' +
+            '<input id="hl-id" name="lid" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="회원가입한 아이디" value="' + esc(myAccountId() || "") + '" aria-describedby="hl-id-err"><p class="field-err" id="hl-id-err"></p></div>' +
+          '<div class="field" data-field="lpw"><label for="hl-pw">비밀번호</label>' +
+            '<input id="hl-pw" name="lpw" type="password" autocomplete="current-password" placeholder="비밀번호" aria-describedby="hl-pw-err"><p class="field-err" id="hl-pw-err"></p></div>' +
+          '<p class="field-err lg-err" role="alert"></p>' +
+          '<button type="submit" class="btn btn-primary btn-sm">로그인</button>' +
+          '<p class="login-join small">아직 회원이 아니신가요? <a href="#apply" data-hdr-close>회원가입</a></p>' +
+        "</form>";
+    } else {
+      pop = '<p class="hdr-pop-title">' + esc(u.name) + ' 님<small>' + esc(u.account || u.id) + "</small></p>" +
+        '<a class="hdr-pop-link" href="#portal" data-hdr-close data-hdr-tab="att">✅ 출석 체크</a>' +
+        '<a class="hdr-pop-link" href="#portal" data-hdr-close data-hdr-tab="sub">📤 과제 제출</a>' +
+        '<button type="button" class="hdr-pop-link hdr-logout">로그아웃</button>';
+    }
+    box.innerHTML = btn + '<div class="hdr-pop" id="hdr-pop"' + (open ? "" : " hidden") + ">" + pop + "</div>";
+  }
+  function toggleHeaderUser(open) {
+    var b = $(".hdr-user-btn"), pop = $("#hdr-pop");
+    if (!b || !pop) return;
+    pop.hidden = !open;
+    b.setAttribute("aria-expanded", open ? "true" : "false");
+    // 휴대폰에서는 화면 폭에 맞춰 헤더 바로 아래에 띄움
+    var hd = document.querySelector(".header");
+    pop.style.top = open && getComputedStyle(pop).position === "fixed" && hd ? Math.round(hd.getBoundingClientRect().bottom + 8) + "px" : "";
+    if (open) { var first = $("input, a, button", pop); if (first) first.focus(); }
+  }
+  function logout() {
+    store.del("user"); tab = "att"; currentAsg = null; showPortal(); toast("로그아웃했습니다.");
+  }
+
   function showPortal() {
+    renderHeaderUser();
     var box = $("#portal .portal-inner");
     if (!box) return;
     var u = user();
@@ -4020,7 +4083,7 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
       if (e.target.classList.contains("sub-form")) submitFile();
     });
     pt.addEventListener("click", function (e) {
-      if (e.target.closest(".logout")) { store.del("user"); tab = "att"; currentAsg = null; showPortal(); toast("로그아웃했습니다."); return; }
+      if (e.target.closest(".logout")) { logout(); return; }
       var t = e.target.closest("[data-tab]");
       if (t) { tab = t.dataset.tab; showPortal(); $('[data-tab="' + tab + '"]').focus(); return; }
       var c = e.target.closest(".att-check");
@@ -4038,6 +4101,32 @@ window.__PAGE_SOURCE = "<!doctype html>\n" + document.documentElement.outerHTML;
       showPortal();
       $('[data-tab="' + tab + '"]').focus();
     });
+
+    // 헤더의 로그인 버튼
+    var hu = document.getElementById("hdr-user");
+    if (hu) {
+      hu.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (!e.target.classList.contains("hdr-login")) return;
+        login(e.target);
+        if (user()) renderHeaderUser(); // 성공하면 닫힌 상태로 다시 그림
+      });
+      hu.addEventListener("click", function (e) {
+        if (e.target.closest(".hdr-user-btn")) { toggleHeaderUser($("#hdr-pop").hidden); return; }
+        if (e.target.closest(".hdr-logout")) { logout(); $(".hdr-user-btn").focus(); return; }
+        var l = e.target.closest("[data-hdr-close]");
+        if (l) {
+          if (l.dataset.hdrTab && user()) { tab = l.dataset.hdrTab; showPortal(); }
+          else toggleHeaderUser(false);
+        }
+      });
+      document.addEventListener("click", function (e) {
+        if (!hu.contains(e.target) && $("#hdr-pop") && !$("#hdr-pop").hidden) toggleHeaderUser(false);
+      });
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && $("#hdr-pop") && !$("#hdr-pop").hidden) { toggleHeaderUser(false); $(".hdr-user-btn").focus(); }
+      });
+    }
 
     // 커리큘럼의 '사이트에서 제출하기' 버튼
     document.addEventListener("click", function (e) {
